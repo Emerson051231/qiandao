@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看考勤记录</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .attendance-table th, .attendance-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .attendance-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>查看考勤记录</h1>
+
+    <!-- 老师查看考勤记录部分 -->
+    <div>
+        <button onclick="loadAttendance()">加载考勤记录</button>
+        <table class="attendance-table" id="attendanceTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>学生姓名</th>
+                    <th>签到时间</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceList"></tbody>
+        </table>
+        <p id="noDataMessage" style="display: none;">没有查询到考勤记录。</p>
+    </div>
+
+    <script>
+        // 检查是否有已存储的考勤数据
+        function loadAttendance() {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+
+            const tableBody = document.getElementById('attendanceList');
+            const table = document.getElementById('attendanceTable');
+            const noDataMessage = document.getElementById('noDataMessage');
+
+            // 如果没有数据，显示没有记录的消息
+            if (attendance.length === 0) {
+                noDataMessage.style.display = 'block';
+                table.style.display = 'none';
+            } else {
+                noDataMessage.style.display = 'none';
+                table.style.display = 'table';
+                tableBody.innerHTML = '';  // 清空现有表格内容
+
+                // 将考勤记录添加到表格
+                attendance.forEach(record => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${record.studentName}</td>
+                        <td>${record.checkinTime}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

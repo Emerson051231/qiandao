@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生签到</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .checkin-form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>学生签到</h1>
+
+    <!-- 学生签到表单 -->
+    <div class="checkin-form">
+        <form id="checkinForm">
+            <label for="studentName">学生姓名:</label>
+            <input type="text" id="studentName" required>
+            <button type="submit">签到</button>
+        </form>
+    </div>
+
+    <script>
+        // 处理学生签到提交
+        document.getElementById('checkinForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const studentName = document.getElementById('studentName').value;
+            const checkinTime = new Date().toLocaleString(); // 当前时间
+
+            // 获取现有的考勤数据并添加新签到记录
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            attendance.push({ studentName, checkinTime });
+
+            // 保存新的考勤记录到 LocalStorage
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+
+            alert('签到成功！');
+            document.getElementById('studentName').value = ''; // 清空输入框
+        });
+    </script>
+
+</body>
+</html>
